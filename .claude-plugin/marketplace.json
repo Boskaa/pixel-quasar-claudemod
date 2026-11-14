@@ -1,0 +1,5 @@
+{
+  "name": "pixel-quasar-claudemod",
+  "owner": { "name": "Boskaa" },
+  "plugins": [{ "name": "pixel-quasar", "source": "./" }]
+}
