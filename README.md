@@ -31,3 +31,4 @@ Il tema si accende da solo all'avvio di ogni sessione.
 
 - Lo sfondo viene disegnato solo dalle app desktop e mobile, non dal terminale né dagli editor.
 - L'app ferma l'animazione quando l'impostazione dell'animazione dello sfondo è disattivata, quando il sistema chiede meno movimento, o quando disegna senza scheda grafica: in quei casi la scena resta visibile ma immobile.
+- La scena si muove solo con spostamenti e trasparenze: una regola `@media` nel foglio di stile o `shape-rendering="crispEdges"` sulla radice la fermano del tutto, quindi non vanno rimessi.

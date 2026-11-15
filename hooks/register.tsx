@@ -355,9 +355,9 @@ const minor = `${n2(-SIN)}px`
 const minorY = `${n2(COS)}px`
 const SINE = 'cubic-bezier(.37,0,.63,1)'
 
+// The app runs a scene's motion on the compositor alone: only transform and opacity move, and a rule that
+// re-evaluates with the frame's size (a media query) or a root that cannot be composited (crisp edges) stops it all.
 const STYLE =
-  // On a tall screen the sides are cropped, so the quasar moves to the middle top.
-  `@media (max-aspect-ratio:1/1){#q{transform:translate(-66px,-10px)}}` +
   `path{fill:none}` +
   // The disk's frames, one at a time.
   `@keyframes fr{0%{opacity:1}${n2(100 / FRAMES)}%,100%{opacity:0}}` +
@@ -392,7 +392,7 @@ const STYLE =
   `.sh{opacity:0;animation:sh 17s linear infinite}`
 
 const SCENE =
-  `<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" shape-rendering="crispEdges">` +
+  `<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice">` +
   `<style>${STYLE}</style>` +
   `<defs>` +
   `<pattern id="n1" width="2" height="2" patternUnits="userSpaceOnUse"><rect width="1" height="1" fill="#6a3cff"/><rect x="1" y="1" width="1" height="1" fill="#6a3cff"/></pattern>` +
@@ -453,10 +453,12 @@ export const register: Register = on => {
 
   on('ui.render', { component: 'Backdrop' }, ($, e, next) => {
     // Another mod's backdrop is left to that mod.
-    if (e.props.plugin !== PLUGIN || e.props.scene !== SCENE_NAME) return next(e)
+    if (e.props.plugin !== PLUGIN) return next(e)
     if (e.surface !== 'desktop' && e.surface !== 'mobile') return next(e)
 
     const { Svg } = $.ui.resolve(e)
+
+    if (e.props.scene !== SCENE_NAME) return next(e)
 
     return (
       <Svg
